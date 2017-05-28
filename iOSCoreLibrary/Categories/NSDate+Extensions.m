@@ -42,7 +42,17 @@
 }
 
 - (BOOL) isBetweenDates:(NSDate*) inStartDate endDate:(NSDate*) inEndDate {
-    return (([self compare:inStartDate] != NSOrderedAscending) && ([self compare:inEndDate] != NSOrderedDescending));
+    NSComparisonResult leftOperand = NSOrderedAscending;
+    NSComparisonResult rightOperand = NSOrderedDescending;
+    switch ([inStartDate compare:inEndDate]) {
+        case NSOrderedDescending:
+            leftOperand = NSOrderedDescending;
+            rightOperand = NSOrderedAscending;
+            break;
+        default:
+            break;
+    }
+    return (([self compare:inStartDate] != leftOperand) && ([self compare:inEndDate] != rightOperand));
 }
 
 - (NSDate*) dateFloor {
