@@ -41,8 +41,11 @@
     return calendar;
 }
 
-- (BOOL) isBetweenDates:(NSDate*) inStartDate endDate:(NSDate*) inEndDate {
-    return (([self compare:inStartDate] != NSOrderedAscending) && ([self compare:inEndDate] != NSOrderedDescending));
+- (BOOL)isBetweenDates:(NSDate *)inStartDate endDate:(NSDate *)inEndDate {
+    if ([inStartDate compare:inEndDate] == NSOrderedDescending) {
+        return ( ([self compare:inStartDate] != NSOrderedDescending) && ([self compare:inEndDate] != NSOrderedAscending) );
+    }
+    return ( ([self compare:inStartDate] != NSOrderedAscending) && ([self compare:inEndDate] != NSOrderedDescending) );
 }
 
 - (NSDate*) dateFloor {
@@ -117,20 +120,32 @@
     return [[NSDate gregorianCalendar] dateFromComponents:components];
 }
 
-- (NSDate*) previousDay {
-    return [self dateByAddingTimeInterval:-86400];
+- (NSDate *)previousDay {
+    NSDateComponents *dateComponets = [[NSDateComponents alloc] init];
+    dateComponets.day = -1;
+    
+    return [[[self class] gregorianCalendar] dateByAddingComponents:dateComponets toDate:self options:0];
 }
 
-- (NSDate*) nextDay {
-    return [self dateByAddingTimeInterval:86400];
+- (NSDate *)nextDay {
+    NSDateComponents *dateComponets = [[NSDateComponents alloc] init];
+    dateComponets.day = 1;
+    
+    return [[[self class] gregorianCalendar] dateByAddingComponents:dateComponets toDate:self options:0];
 }
 
-- (NSDate*) previousWeek {
-    return [self dateByAddingTimeInterval:-(86400*7)];
+- (NSDate *)previousWeek {
+    NSDateComponents *dateComponets = [[NSDateComponents alloc] init];
+    dateComponets.day = -7;
+    
+    return [[[self class] gregorianCalendar] dateByAddingComponents:dateComponets toDate:self options:0];
 }
 
-- (NSDate*) nextWeek {
-    return [self dateByAddingTimeInterval:+(86400*7)];
+- (NSDate *)nextWeek {
+    NSDateComponents *dateComponets = [[NSDateComponents alloc] init];
+    dateComponets.day = 7;
+    
+    return [[[self class] gregorianCalendar] dateByAddingComponents:dateComponets toDate:self options:0];
 }
 
 - (NSDate*) previousMonth {
